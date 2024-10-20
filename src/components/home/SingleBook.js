@@ -1,6 +1,5 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import {
   addToWishlist,
   removeFromWishlist,
@@ -25,7 +24,7 @@ const SingleBook = ({ book }) => {
       />
       <div className='flex-1 h-full flex flex-col'>
         <div className='flex items-center justify-between'>
-          <p className='lws-author'>{id}</p>
+          <p className='cus-author'>{id}</p>
           <span
             onClick={() => toggleWishlist(book.id)}
             className='block cursor-pointer text-xl'
@@ -35,15 +34,15 @@ const SingleBook = ({ book }) => {
         </div>
 
         <div className='space-y-2 h-full'>
-          <h4 className='lws-book-name'>{title}</h4>
+          <h4 className='cus-book-name'>{title}</h4>
           {authors.map((author, index) => (
-            <p className='lws-author' key={index}>
+            <p className='cus-author' key={index}>
               {author.name}
             </p>
           ))}
           <div className='flex flex-wrap'>
             {subjects.map((subject, index) => (
-              <p className='lws-badge' key={index}>
+              <p className='cus-badge' key={index}>
                 {subject}
               </p>
             ))}

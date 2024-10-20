@@ -6,18 +6,36 @@ import SingleBook from './SingleBook'
 
 const BookList = () => {
   const [page, setPage] = useState(1)
+  const [genre, setGenre] = useState('')
+  const [genres, setGenres] = useState([])
   const { sortedByFeature, searchBy } = useSelector((state) => state.filter)
   const {
     data: books,
     isError,
     isFetching,
     refetch,
-  } = useGetBooksQuery(page, { skip: false })
+  } = useGetBooksQuery({ page, genre }, { skip: false })
 
+  //create from genre from book subjects
+  useEffect(() => {
+    if (books) {
+      const genresFromSubject = new Set()
+      books.results.forEach((book) => {
+        if (book.subjects) {
+          book.subjects.forEach((subject) => genresFromSubject.add(subject))
+        }
+      })
+      setGenres(['', ...Array.from(genresFromSubject)])
+    }
+  }, [books])
+  // refetch when genre or page changes
   useEffect(() => {
     refetch()
+  }, [page, genre, refetch])
+  // scroll to top when page changes
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [page, refetch])
+  }, [page])
   // decide what to render
   let content = null
   if (isFetching) {
@@ -69,6 +87,27 @@ const BookList = () => {
   }
   return (
     <>
+      {/* Data filter */}
+      <div className='mb-8 flex items-center justify-between'>
+        <span></span>
+        <div>
+          <h4 htmlFor='genre-filter' className='text-gray-500 mb-4'>
+            Filter by Genre
+          </h4>
+          <select
+            value={genre}
+            onChange={(e) => setGenre(e.target.value)}
+            className='p-2'
+          >
+            {genres.map((genreOption, index) => (
+              <option key={index} value={genreOption}>
+                {genreOption === '' ? 'All Genres' : genreOption}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      {/* main content */}
       <div
         className={`space-y-6 md:space-y-0 md:grid grid-cols-1 ${
           isFetching ? 'lg:grid-cols-1' : 'lg:grid-cols-3'
@@ -76,6 +115,7 @@ const BookList = () => {
       >
         {content}
       </div>
+      {/* pagination */}
       <Pagination
         currentPage={page}
         totalPages={totalPages}

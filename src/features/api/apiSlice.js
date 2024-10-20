@@ -8,7 +8,10 @@ export const apiSlice = createApi({
   tagTypes: ['Books', 'Book'],
   endpoints: (builder) => ({
     getBooks: builder.query({
-      query: (page = 1) => `/books/?page=${page}`,
+      query: ({ page = 1, genre }) => {
+        const genreFilter = genre ? `&topic=${genre}` : ''
+        return `books?page=${page}${genreFilter}`
+      },
     }),
   }),
 })

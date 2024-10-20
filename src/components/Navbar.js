@@ -21,11 +21,7 @@ const Navbar = () => {
         />
 
         <ul className='hidden md:flex items-center space-x-6'>
-          <Link
-            className='font-semibold cursor-pointer'
-            to='/'
-            id='lws-bookStore'
-          >
+          <Link className='font-semibold cursor-pointer' to='/'>
             <li>Book Store</li>
           </Link>
         </ul>
@@ -48,7 +44,6 @@ const Navbar = () => {
               type='text'
               placeholder='Filter books by title...'
               className='search'
-              id='lws-search'
               value={searchValue}
               onChange={handleSearch}
             />
